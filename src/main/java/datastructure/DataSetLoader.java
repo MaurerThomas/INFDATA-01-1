@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class DataSetLoader {
 
-    public static void main(String[] args) throws IOException {
+    public TreeMap LoadDataSet() throws IOException {
         // Make our logger to log stuff.
         Logger logger = Logger.getLogger("myLogger");
         // Make our TreeMap with a list as values.
@@ -36,16 +36,9 @@ public class DataSetLoader {
                     existingUser.addMovieRatingsToUser(movieId, rating);
                 }
             }
-            // Iterate over the treeMap and see each result.
-            Set set = treeMap.entrySet();
-            Iterator iterator = set.iterator();
-            while (iterator.hasNext()) {
-                Map.Entry mentry = (Map.Entry) iterator.next();
-                System.out.print("key: " + mentry.getKey() + " Value: ");
-                System.out.println(mentry.getValue());
-            }
         } catch (FileNotFoundException e) {
             logger.log(Level.SEVERE, "File not found", e);
         }
+        return  treeMap;
     }
 }

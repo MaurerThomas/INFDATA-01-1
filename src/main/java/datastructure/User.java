@@ -1,5 +1,8 @@
 package datastructure;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -21,5 +24,9 @@ public class User {
 
     public String toString() {
         return movieRatingsFromUser.toString();
+    }
+
+    public float getMovieRating(int movieId){
+        return movieRatingsFromUser.get(movieId);
     }
 }
