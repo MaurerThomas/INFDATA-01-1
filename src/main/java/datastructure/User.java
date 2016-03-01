@@ -1,5 +1,7 @@
 package datastructure;
 
+import sun.reflect.generics.tree.Tree;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -28,5 +30,9 @@ public class User {
 
     public float getMovieRating(int movieId){
         return movieRatingsFromUser.get(movieId);
+    }
+
+    public TreeMap getTreemap(){
+        return movieRatingsFromUser;
     }
 }
