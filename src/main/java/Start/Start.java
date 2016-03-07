@@ -1,42 +1,33 @@
-package Start;
+package start;
 
-import Strategy.Euclidean;
 import datastructure.DataSetLoader;
 import datastructure.User;
 
 import java.io.IOException;
 import java.util.TreeMap;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- * Created by armindo on 29-2-2016.
- */
 public class Start {
+    public static final char EUCLIDEAN = 'e';
+    public static final char COSINE = 'c';
+    public static final char PEARSON = 'p';
 
-    private Start(){}
+    private Start() {
+    }
 
     public static void main(String[] args) {
         DataSetLoader dsl = new DataSetLoader();
-        TreeMap TM = new TreeMap<>();
+        TreeMap allUsersTreeMap = new TreeMap<>();
+        TreeMap nearestNeighboursRating;
         Logger logger = Logger.getLogger("myLogger");
-        Euclidean ec = new Euclidean();
-
         try {
-           TM = dsl.LoadDataSet();
+            allUsersTreeMap = dsl.LoadDataSet();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
-
-        //TODO: Forloop maken om de Treemap vna users door te lopen en dan distances uit te lezen.
-        //Get rating of two users on one movie
-        User userOne = (User) TM.get(1);
-        User userTwo = (User) TM.get(2);
-        User userThree = (User) TM.get(3);
-
-        double ecRatingOneTwo = ec.Calculate(userOne,userTwo);
-        double ecRatingOneThree = ec.Calculate(userOne,userThree);
-
-        System.out.println("ecRatingOneTwo:" + ecRatingOneTwo + " ecRatingOneThree: " + ecRatingOneThree);
-
+        User userSeven = (User) allUsersTreeMap.get(6);
+        nearestNeighboursRating = userSeven.calculateUsers(userSeven, allUsersTreeMap, EUCLIDEAN, 0.35);
+        System.out.println(nearestNeighboursRating.toString());
     }
 }
