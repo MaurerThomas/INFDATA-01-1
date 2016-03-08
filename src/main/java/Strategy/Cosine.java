@@ -2,15 +2,12 @@ package strategy;
 
 import datastructure.User;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
-public class Cosine implements INearestNeighbourAlgorithms {
+public class Cosine implements INearestNeighbourAlgorithm {
 
     @Override
-    public double Calculate(User userOne, User userTwo) {
+    public double calculate(User userOne, User userTwo) {
         float x = 0;
         float y = 0;
         double x2 = 0;
@@ -18,30 +15,39 @@ public class Cosine implements INearestNeighbourAlgorithms {
         float dotProductXY = 0;
         double denominator;
 
-        TreeMap userOneTreeMap = userOne.getTreemap();
-        TreeMap userTwoTreeMap = userTwo.getTreemap();
-        Set set = userOneTreeMap.entrySet();
-        Iterator it = set.iterator();
+        Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
+        Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
 
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
+        Set<Integer> keys = new HashSet<>(userOneTreeMap.keySet());
+        keys.addAll(userTwoTreeMap.keySet());
 
-            if (userTwoTreeMap.get(me.getKey()) != null) {
-                float userOneRating = Float.parseFloat(me.getValue().toString());
-                float userTwoRating = Float.parseFloat(userTwoTreeMap.get(me.getKey()).toString());
+        for(int movieId : keys) {
+            float userOneRating;
+            float userTwoRating;
 
-                x += userOneRating * userOneRating;
-                y += userTwoRating * userTwoRating;
-
-                x2 = Math.sqrt(x);
-                y2 = Math.sqrt(y);
-
-                dotProductXY += (userOneRating * userTwoRating);
-            } else {
-                return 0;
+            if(userOneTreeMap.containsKey(movieId)){
+                userOneRating = userOneTreeMap.get(movieId);
+            }else {
+                userOneRating = 0;
             }
+
+            if(userTwoTreeMap.containsKey(movieId)){
+                userTwoRating = userTwoTreeMap.get(movieId);
+            }else {
+                userTwoRating = 0;
+            }
+
+            x += userOneRating * userOneRating;
+            y += userTwoRating * userTwoRating;
+
+            x2 = Math.sqrt(x);
+            y2 = Math.sqrt(y);
+
+            dotProductXY += (userOneRating * userTwoRating);
         }
+
         denominator = x2 * y2;
+
         return dotProductXY / denominator;
     }
 }

@@ -2,32 +2,47 @@ package start;
 
 import datastructure.DataSetLoader;
 import datastructure.User;
+import strategy.Cosine;
+import strategy.Euclidean;
+import strategy.INearestNeighbourAlgorithm;
+import strategy.Pearson;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Start {
-    public static final char EUCLIDEAN = 'e';
-    public static final char COSINE = 'c';
-    public static final char PEARSON = 'p';
+    public static final INearestNeighbourAlgorithm EUCLIDEAN = new Euclidean();
+    public static final INearestNeighbourAlgorithm COSINE = new Cosine();
+    public static final INearestNeighbourAlgorithm PEARSON = new Pearson();
 
     private Start() {
     }
 
     public static void main(String[] args) {
         DataSetLoader dsl = new DataSetLoader();
-        TreeMap allUsersTreeMap = new TreeMap<>();
-        TreeMap nearestNeighboursRating;
+        Map<Integer, User> allUsersTreeMap = new TreeMap<>();
+        Map<Integer, Double> nearestNeighboursRatingEuclidean;
+        Map<Integer, Double> nearestNeighboursRatingCosine;
+        Map<Integer, Double> nearestNeighboursRatingPearson;
         Logger logger = Logger.getLogger("myLogger");
+
         try {
-            allUsersTreeMap = dsl.LoadDataSet();
+            allUsersTreeMap = dsl.loadDataSet();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
-        User userSeven = (User) allUsersTreeMap.get(6);
-        nearestNeighboursRating = userSeven.calculateUsers(userSeven, allUsersTreeMap, EUCLIDEAN, 0.35);
-        System.out.println(nearestNeighboursRating.toString());
+
+        User userSeven = allUsersTreeMap.get(7);
+        nearestNeighboursRatingEuclidean = userSeven.calculateUsers(userSeven, allUsersTreeMap, EUCLIDEAN);
+        System.out.println("Euclidean: " + nearestNeighboursRatingEuclidean.toString());
+
+        nearestNeighboursRatingCosine = userSeven.calculateUsers(userSeven, allUsersTreeMap, COSINE, 0.75);
+        System.out.println("Cosine: " + nearestNeighboursRatingCosine);
+
+        nearestNeighboursRatingPearson = userSeven.calculateUsers(userSeven, allUsersTreeMap, PEARSON);
+        System.out.println("Pearson: " + nearestNeighboursRatingPearson);
     }
 }

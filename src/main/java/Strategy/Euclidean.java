@@ -4,28 +4,23 @@ import datastructure.User;
 
 import java.util.*;
 
-public class Euclidean implements INearestNeighbourAlgorithms {
+public class Euclidean implements INearestNeighbourAlgorithm {
 
     @Override
-    public double Calculate(User userOne, User userTwo) {
-        List<Float> calculatedValues = new ArrayList<>();
-        TreeMap userOneTreeMap = userOne.getTreemap();
-        TreeMap userTwoTreeMap = userTwo.getTreemap();
-        Set set = userOneTreeMap.entrySet();
-        Iterator it = set.iterator();
+    public double calculate(User userOne, User userTwo) {
+        List<Double> calculatedValues = new ArrayList<>();
+        Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
+        Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
         double calculatedValuesSum = 0;
 
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
-            float calculated;
+        for(Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {
+            double calculated;
 
-            if (userTwoTreeMap.get(me.getKey()) != null) {
-                float userOneRating = Float.parseFloat(me.getValue().toString());
-                float userTwoRating = Float.parseFloat(userTwoTreeMap.get(me.getKey()).toString());
-                calculated = (userOneRating - userTwoRating) * (userOneRating - userTwoRating);
-                calculatedValues.add(calculated);
-            } else {
-                calculated = 0;
+            if (userTwoTreeMap.containsKey(me.getKey())) {
+                float userOneRating = me.getValue();
+                float userTwoRating = userTwoTreeMap.get(me.getKey());
+
+                calculated = Math.pow(userOneRating - userTwoRating, 2);
                 calculatedValues.add(calculated);
             }
         }
@@ -33,6 +28,6 @@ public class Euclidean implements INearestNeighbourAlgorithms {
         for (int i = 0; i < calculatedValues.size(); i++) {
             calculatedValuesSum += calculatedValues.get(i);
         }
-        return Math.sqrt((1 + calculatedValuesSum));
+        return Math.sqrt(1 + calculatedValuesSum);
     }
 }

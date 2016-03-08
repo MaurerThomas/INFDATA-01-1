@@ -1,28 +1,18 @@
 package datastructure;
 
-import strategy.Cosine;
-import strategy.Euclidean;
-import strategy.Pearson;
+import strategy.INearestNeighbourAlgorithm;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
  * Created by Thomas on 9-2-2016.
  */
 public class User {
-
-    Euclidean ec = new Euclidean();
-    Pearson pearson = new Pearson();
-    Cosine cosine = new Cosine();
-
-
     private int userId;
-    private TreeMap<Integer, Float> movieRatingsFromUser = new TreeMap<>();
+    private Map<Integer, Float> movieRatingsFromUser = new TreeMap<>();
 
-    public User(int userId, TreeMap<Integer, Float> movieRatingsFromUser) {
+    public User(int userId, Map<Integer, Float> movieRatingsFromUser) {
         this.movieRatingsFromUser = movieRatingsFromUser;
         this.userId = userId;
     }
@@ -31,6 +21,7 @@ public class User {
         movieRatingsFromUser.put(movieId, rating);
     }
 
+    @Override
     public String toString() {
         return movieRatingsFromUser.toString();
     }
@@ -39,7 +30,7 @@ public class User {
         return movieRatingsFromUser.get(movieId);
     }
 
-    public TreeMap getTreemap() {
+    public Map getTreemap() {
         return movieRatingsFromUser;
     }
 
@@ -47,29 +38,26 @@ public class User {
         return userId;
     }
 
-    public TreeMap calculateUsers(User targetUser, TreeMap users, char calculationMethod, double threshold) {
-        Set set = users.entrySet();
-        Iterator it = set.iterator();
+    public Map<Integer, Double> calculateUsers(User targetUser, Map<Integer, User> users, INearestNeighbourAlgorithm calculationMethod) {
+        return calculateUsers(targetUser, users, calculationMethod, null);
+    }
+
+    public Map<Integer, Double> calculateUsers(User targetUser, Map<Integer, User> users, INearestNeighbourAlgorithm calculationMethod, Double threshold) {
         int targetUserId = targetUser.getUserId();
-        TreeMap nearestNeighbours = new TreeMap<>();
+        Map<Integer, Double> nearestNeighbours = new TreeMap<>();
 
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
-            double rating = 0;
-            User currentUser = (User) me.getValue();
+        for(User currentUser : users.values()) {
+            double rating;
             int currentUserId = currentUser.getUserId();
-            //Check of user gelijk is aan targetUser
-            if (targetUserId != currentUserId) {
-                //e = ec, p = pearson, c = cosine
-                if (calculationMethod == 'c') {
-                    rating = cosine.Calculate(targetUser, currentUser);
-                } else if (calculationMethod == 'e') {
-                    rating = ec.Calculate(targetUser, currentUser);
-                } else if (calculationMethod == 'p') {
-                    rating = pearson.Calculate(targetUser, currentUser);
-                }
 
-                if (rating >= threshold) {
+            //Check if user is not similar to targetUser, otherwise skip comparison
+            if (targetUserId != currentUserId) {
+                //use the calculationMethod's calculate function
+                rating = calculationMethod.calculate(targetUser, currentUser);
+
+                if(threshold == null) {
+                    nearestNeighbours.put(currentUserId, rating);
+                } else if (rating >= threshold) {
                     nearestNeighbours.put(currentUserId, rating);
                 }
             }
