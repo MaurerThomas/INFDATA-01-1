@@ -2,6 +2,7 @@ package start;
 
 import datastructure.DataSetLoader;
 import datastructure.User;
+import prediction.RatingPredictor;
 import strategy.Cosine;
 import strategy.Euclidean;
 import strategy.INearestNeighbourAlgorithm;
@@ -24,25 +25,26 @@ public class Start {
     public static void main(String[] args) {
         DataSetLoader dsl = new DataSetLoader();
         Map<Integer, User> allUsersTreeMap = new TreeMap<>();
-        Map<Integer, Double> nearestNeighboursRatingEuclidean;
-        Map<Integer, Double> nearestNeighboursRatingCosine;
-        Map<Integer, Double> nearestNeighboursRatingPearson;
+        Map<User, Double> nearestNeighboursRatingEuclidean;
+        Map<User, Double> nearestNeighboursRatingCosine;
+        Map<User, Double> nearestNeighboursRatingPearson;
         Logger logger = Logger.getLogger("myLogger");
-
+        RatingPredictor ratingPredictor = new RatingPredictor();
         try {
             allUsersTreeMap = dsl.loadDataSet();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
 
-        User userSeven = allUsersTreeMap.get(7);
-        nearestNeighboursRatingEuclidean = userSeven.calculateUsers(userSeven, allUsersTreeMap, EUCLIDEAN);
-        System.out.println("Euclidean: " + nearestNeighboursRatingEuclidean.toString());
+        User targetUser = allUsersTreeMap.get(7);
+        //nearestNeighboursRatingEuclidean = targetUser.calculateUsers(targetUser, allUsersTreeMap, EUCLIDEAN);
+        //nearestNeighboursRatingCosine = targetUser.calculateUsers(targetUser, allUsersTreeMap, COSINE, 0.75);
+        nearestNeighboursRatingPearson = targetUser.calculateUsers(targetUser, allUsersTreeMap, PEARSON);
 
-        nearestNeighboursRatingCosine = userSeven.calculateUsers(userSeven, allUsersTreeMap, COSINE, 0.75);
-        System.out.println("Cosine: " + nearestNeighboursRatingCosine);
 
-        nearestNeighboursRatingPearson = userSeven.calculateUsers(userSeven, allUsersTreeMap, PEARSON);
-        System.out.println("Pearson: " + nearestNeighboursRatingPearson);
+        ratingPredictor.getPredictedRating(targetUser, 101, nearestNeighboursRatingPearson);
+        ratingPredictor.getPredictedRating(targetUser, 103, nearestNeighboursRatingPearson);
+        ratingPredictor.getPredictedRating(targetUser, 106, nearestNeighboursRatingPearson);
+
     }
 }

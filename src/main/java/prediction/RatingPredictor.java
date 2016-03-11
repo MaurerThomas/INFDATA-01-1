@@ -1,0 +1,39 @@
+package prediction;
+
+import datastructure.User;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Created by Thomas on 11-3-2016.
+ */
+public class RatingPredictor {
+
+    public RatingPredictor() {
+    }
+
+    public double getPredictedRating(User targetUser, int movieId, Map<User, Double> nearestNeighbours) {
+        Set<User> keys = new HashSet<>(nearestNeighbours.keySet());
+        Map<Integer, Float> movieRatingsFromUser;
+        double totalSimularity = 0;
+        double simularityTimesRating = 0;
+
+        for (User neighbour : keys) {
+            movieRatingsFromUser = neighbour.getTreemap();
+
+            if (movieRatingsFromUser.get(movieId) != null) {
+                float userRating = neighbour.getMovieRating(movieId);
+                double simularity = nearestNeighbours.get(neighbour);
+
+                simularityTimesRating += (simularity * userRating);
+                totalSimularity += simularity;
+            }
+        }
+        System.out.println(simularityTimesRating / totalSimularity);
+
+        return simularityTimesRating / totalSimularity;
+
+    }
+}
