@@ -35,9 +35,10 @@ public class Start {
         }
 
         User targetUser = allUsersTreeMap.get(7);
-        nearestNeighboursRatingEuclidean = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, null, 3);
-        nearestNeighboursRatingCosine = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 0.35, 3);
-        nearestNeighboursRatingPearson = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, null, 3);
+        nearestNeighboursRatingEuclidean = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
+
+        nearestNeighboursRatingCosine = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 3, false, 0.35);
+        nearestNeighboursRatingPearson = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, 3, false);
 
 
         //ratingPredictor.getPredictedRating(targetUser, 101, nearestNeighboursRatingPearson);
