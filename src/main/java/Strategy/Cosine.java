@@ -5,7 +5,12 @@ import datastructure.User;
 import java.util.*;
 
 public class Cosine implements INearestNeighbourAlgorithm {
-
+    /**
+     * Calculate the similarity between two users.
+     * @param userOne The first user
+     * @param userTwo The second user
+     * @return Cosine similarity
+     */
     @Override
     public double calculate(User userOne, User userTwo) {
         float x = 0;

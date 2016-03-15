@@ -5,7 +5,12 @@ import datastructure.User;
 import java.util.*;
 
 public class Euclidean implements INearestNeighbourAlgorithm {
-
+    /**
+     * Calculate the similarity between two users.
+     * @param userOne The first user
+     * @param userTwo The second user
+     * @return Euclidean distance
+     */
     @Override
     public double calculate(User userOne, User userTwo) {
         List<Double> calculatedValues = new ArrayList<>();

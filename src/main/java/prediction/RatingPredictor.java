@@ -6,14 +6,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Thomas on 11-3-2016.
- */
 public class RatingPredictor {
 
-    public RatingPredictor() {
-    }
-
+    /**
+     * Get the predicted rating for a targetUser and movie.
+     * @param targetUser The target User.
+     * @param movieId The movieId, which has not been rated by the target user yet.
+     * @param nearestNeighbours A Map of nearest neighbours.
+     * @return The predicted rating to an item.
+     */
     public double getPredictedRating(User targetUser, int movieId, Map<User, Double> nearestNeighbours) {
         Set<User> keys = new HashSet<>(nearestNeighbours.keySet());
         Map<Integer, Float> movieRatingsFromUser;
