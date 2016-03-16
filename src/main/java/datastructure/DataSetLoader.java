@@ -10,12 +10,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataSetLoader {
-
+    /**
+     * Load the dataset from a datafile.
+     * @return A map with the userId and User object.
+     * @throws IOException
+     */
     public Map<Integer, User> loadDataSet() throws IOException {
         // Make our logger to log stuff.
         Logger logger = Logger.getLogger("myLogger");
         // Make our TreeMap with a list as values.
-        Map<Integer, User> treeMap = new TreeMap<>();
+        Map<Integer, User> userMap = new TreeMap<>();
         // Create a new file.
         System.getProperty("user.dir");
         File file = new File("data/userItem.data");
@@ -28,19 +32,19 @@ public class DataSetLoader {
                 int movieId = Integer.parseInt(details[1]);
                 float rating = Float.parseFloat(details[2]);
                 // If user does not exist then add preferences.
-                if (!treeMap.containsKey(userId)) {
+                if (!userMap.containsKey(userId)) {
                     Map<Integer, Float> userRatings = new TreeMap<>();
                     userRatings.put(movieId, rating);
                     User newUser = new User(userId, userRatings);
-                    treeMap.put(userId, newUser);
+                    userMap.put(userId, newUser);
                 } else {
-                    User existingUser = treeMap.get(userId);
+                    User existingUser = userMap.get(userId);
                     existingUser.addMovieRatingsToUser(movieId, rating);
                 }
             }
         } catch (FileNotFoundException e) {
             logger.log(Level.SEVERE, "File not found", e);
         }
-        return treeMap;
+        return userMap;
     }
 }
