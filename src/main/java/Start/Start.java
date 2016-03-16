@@ -3,13 +3,13 @@ package start;
 import datastructure.DataSetLoader;
 import datastructure.User;
 import prediction.RatingPredictor;
+import prediction.NeighbourPredictor;
 import strategy.Cosine;
 import strategy.Euclidean;
 import strategy.INearestNeighbourAlgorithm;
 import strategy.Pearson;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +27,7 @@ public class Start {
         Map<User, Double> nearestNeighboursRatingPearson;
         Logger logger = Logger.getLogger("myLogger");
         RatingPredictor ratingPredictor = new RatingPredictor();
+        NeighbourPredictor neighbourPredictor = new NeighbourPredictor();
 
         try {
             allUsersTreeMap = dsl.loadDataSet();
@@ -35,9 +36,9 @@ public class Start {
         }
 
         User targetUser = allUsersTreeMap.get(7);
-        nearestNeighboursRatingEuclidean = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
-        nearestNeighboursRatingCosine = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 3, false, 0.35);
-        nearestNeighboursRatingPearson = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, 3, false);
+        nearestNeighboursRatingEuclidean = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
+        nearestNeighboursRatingCosine = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 3, false, 0.35);
+        nearestNeighboursRatingPearson = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, 3, false);
 
 
         //ratingPredictor.getPredictedRating(targetUser, 101, nearestNeighboursRatingPearson);
@@ -86,7 +87,7 @@ public class Start {
         System.out.println(seperator);
 
         User userThree = allUsersTreeMap.get(3);
-        Map<User, Double> nearestNeighboursRatingPearsonThreeFour = userThree.nearestNeighbourAlgorithm(userThree, allUsersTreeMap, PEARSON, 3, false);
+        Map<User, Double> nearestNeighboursRatingPearsonThreeFour = neighbourPredictor.nearestNeighbourAlgorithm(userThree, allUsersTreeMap, PEARSON, 3, false);
         Set<User> pearsonSetThreeFour = nearestNeighboursRatingPearsonThreeFour.keySet();
         for(Iterator<User> i = pearsonSetThreeFour.iterator(); i.hasNext();){
             User neighbour = i.next();
