@@ -33,6 +33,6 @@ public class Euclidean implements INearestNeighbourAlgorithm {
         for (int i = 0; i < calculatedValues.size(); i++) {
             calculatedValuesSum += calculatedValues.get(i);
         }
-        return Math.sqrt(1 + calculatedValuesSum);
+        return Math.sqrt(calculatedValuesSum);
     }
 }
