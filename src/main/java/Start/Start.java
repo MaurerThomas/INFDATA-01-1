@@ -9,8 +9,8 @@ import strategy.INearestNeighbourAlgorithm;
 import strategy.Pearson;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.TreeMap;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +36,6 @@ public class Start {
 
         User targetUser = allUsersTreeMap.get(7);
         nearestNeighboursRatingEuclidean = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
-
         nearestNeighboursRatingCosine = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 3, false, 0.35);
         nearestNeighboursRatingPearson = targetUser.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, 3, false);
 
@@ -48,32 +47,55 @@ public class Start {
 
         String seperator = "----------------------------";
         System.out.println(seperator);
-        System.out.println("Part 1: E");
+        System.out.println("Part 1: question 5");
         System.out.println(seperator);
         System.out.println("Target user 7, threshold 0.35");
         System.out.println("PEARSON");
-        int pearsonCoefficientCounter = 1;
-        for(double pearsonCoefficient : nearestNeighboursRatingPearson.values()){
-            System.out.println("Nearest neighbour " + pearsonCoefficientCounter + ", similarity: " + pearsonCoefficient);
-            pearsonCoefficientCounter++;
+
+        Set<User> pearsonSet = nearestNeighboursRatingPearson.keySet();
+        for(Iterator<User> i = pearsonSet.iterator(); i.hasNext();){
+            User neighbour = i.next();
+            int userId = neighbour.getUserId();
+            double similarity = nearestNeighboursRatingPearson.get(neighbour);
+
+            System.out.println("Nearest neighbour " + userId + ", with similarity: " + similarity);
         }
 
         System.out.println("COSINE");
-        int cosineCoefficientCounter = 1;
-        for(double cosineCoefficient : nearestNeighboursRatingCosine.values()){
-            System.out.println("Nearest neighbour " + cosineCoefficientCounter + ", similarity: " + cosineCoefficient);
-            cosineCoefficientCounter++;
+        Set<User> cosineSet = nearestNeighboursRatingCosine.keySet();
+        for(Iterator<User> i = cosineSet.iterator(); i.hasNext();){
+            User neighbour = i.next();
+            int userId = neighbour.getUserId();
+            double similarity = nearestNeighboursRatingCosine.get(neighbour);
+
+            System.out.println("Nearest neighbour " + userId + ", with similarity: " + similarity);
         }
 
         System.out.println("EUCLIDEAN");
-        int euclideanCoefficientCounter = 1;
-        for(double euclideanCoefficient : nearestNeighboursRatingEuclidean.values()) {
-            System.out.println("Nearest neighbour " + euclideanCoefficientCounter + ", similarity: " + euclideanCoefficient);
-            euclideanCoefficientCounter++;
+        Set<User> euclideanSet = nearestNeighboursRatingEuclidean.keySet();
+        for(Iterator<User> i = euclideanSet.iterator(); i.hasNext();) {
+            User neighbour = i.next();
+            int userId = neighbour.getUserId();
+            double similarity = nearestNeighboursRatingEuclidean.get(neighbour);
+
+            System.out.println("Nearest neighbour " + userId + ", with similarity: " + similarity);
         }
 
         System.out.println(seperator);
-        System.out.println("Part 1: G");
+        System.out.println("Part 1: question 6");
         System.out.println(seperator);
+
+        User userThree = allUsersTreeMap.get(3);
+        Map<User, Double> nearestNeighboursRatingPearsonThreeFour = userThree.nearestNeighbourAlgorithm(userThree, allUsersTreeMap, PEARSON, 3, false);
+        Set<User> pearsonSetThreeFour = nearestNeighboursRatingPearsonThreeFour.keySet();
+        for(Iterator<User> i = pearsonSetThreeFour.iterator(); i.hasNext();){
+            User neighbour = i.next();
+            int userId = neighbour.getUserId();
+            if(userId == 4){
+                double similarity = nearestNeighboursRatingPearsonThreeFour.get(neighbour);
+                System.out.println("User 3 and 4 have a Pearson coefficient similarity of " + similarity);
+            }
+        }
+
     }
 }
