@@ -32,9 +32,6 @@ public class RatingPredictor {
                 totalSimularity += simularity;
             }
         }
-        System.out.println(simularityTimesRating / totalSimularity);
-
         return simularityTimesRating / totalSimularity;
-
     }
 }

@@ -36,15 +36,10 @@ public class Start {
         }
 
         User targetUser = allUsersTreeMap.get(7);
+
         nearestNeighboursRatingEuclidean = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
         nearestNeighboursRatingCosine = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, COSINE, 3, false, 0.35);
         nearestNeighboursRatingPearson = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, PEARSON, 3, false);
-
-
-        //ratingPredictor.getPredictedRating(targetUser, 101, nearestNeighboursRatingPearson);
-        //ratingPredictor.getPredictedRating(targetUser, 103, nearestNeighboursRatingPearson);
-        //ratingPredictor.getPredictedRating(targetUser, 106, nearestNeighboursRatingPearson);
-
 
         String seperator = "----------------------------";
         System.out.println(seperator);
@@ -97,6 +92,36 @@ public class Start {
                 System.out.println("User 3 and 4 have a Pearson coefficient similarity of " + similarity);
             }
         }
+
+        System.out.println(seperator);
+        System.out.println("Part 1: question 8");
+        System.out.println(seperator);
+
+
+        double ratingUserSevenMovie101 = ratingPredictor.getPredictedRating(targetUser, 101, nearestNeighboursRatingPearson);
+        double ratingUserSevenMovie103 = ratingPredictor.getPredictedRating(targetUser, 103, nearestNeighboursRatingPearson);
+        double ratingUserSevenMovie106 =ratingPredictor.getPredictedRating(targetUser, 106, nearestNeighboursRatingPearson);
+
+        System.out.println("Predicted rating for item 101: " + ratingUserSevenMovie101);
+        System.out.println("Predicted rating for item 103: " + ratingUserSevenMovie103);
+        System.out.println("Predicted rating for item 106: " + ratingUserSevenMovie106);
+
+
+        User targetUserFour = allUsersTreeMap.get(4);
+        Map<User, Double> nearestNeighboursRatingPearsonUserFour = neighbourPredictor.nearestNeighbourAlgorithm(targetUserFour, allUsersTreeMap, PEARSON, 3, false);
+        double ratingUserFourMovie101 = ratingPredictor.getPredictedRating(targetUserFour, 101, nearestNeighboursRatingPearsonUserFour);
+        System.out.println("Predicted rating for item 101 with user four: " + ratingUserFourMovie101);
+
+        System.out.println(seperator);
+        System.out.println("Part 1: question 9");
+        System.out.println(seperator);
+
+//        System.out.println("User seven");
+//        System.out.println("Predicted rating for item 101: " + ratingUserSevenMovie101);
+//        System.out.println("Predicted rating for item 103: " + ratingUserSevenMovie103);
+//
+//        System.out.println("Predicted rating for item 101: " + ratingUserSevenMovie101);
+//        System.out.println("Predicted rating for item 103: " + ratingUserSevenMovie103);
 
     }
 }

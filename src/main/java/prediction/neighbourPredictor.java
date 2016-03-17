@@ -25,23 +25,7 @@ public class NeighbourPredictor {
     public Map<User, Double> nearestNeighbourAlgorithm(User targetUser, Map<Integer, User> users, INearestNeighbourAlgorithm calculationMethod, int maxNeighbours, boolean reversed, Double threshold) {
         int targetUserId = targetUser.getUserId();
         Map<User, Double> nearestNeighbours = new TreeMap<>();
-
-        for (User currentUser : users.values()) {
-            // use the calculationMethod's calculate function
-            double similarity = calculationMethod.calculate(targetUser, currentUser);
-            int currentUserId = currentUser.getUserId();
-
-            //Check if user is not similar to targetUser, otherwise skip comparison
-            if (targetUserId != currentUserId) {
-                Map.Entry<User, Double> minimumEntry = null;
-                //Fill 3 slots
-                if (nearestNeighbours.size() < maxNeighbours) {
-                    nearestNeighbours.put(currentUser, similarity);
-                } else if (nearestNeighbours.size() >= maxNeighbours) {
-                    nearestNeighbours = checkToInsertOrRemoveNeighbour(minimumEntry, nearestNeighbours, similarity, currentUser, reversed, threshold);
-                }
-            }
-        }
+        nearestNeighbours = new NeighbourCreator(targetUser, users, calculationMethod, maxNeighbours, reversed, threshold, targetUserId, nearestNeighbours).invoke();
         //Return highest similar neighbours
         return nearestNeighbours;
     }
@@ -49,69 +33,6 @@ public class NeighbourPredictor {
     public Map<User, Double> nearestNeighbourAlgorithm(User targetUser, Map<Integer, User> users, INearestNeighbourAlgorithm calculationMethod, int maxNeighbours, boolean reversed) {
         return nearestNeighbourAlgorithm(targetUser, users, calculationMethod, maxNeighbours, reversed, null);
     }
-
-    /**
-     * Check whether to insert or remove a neighbour based on the minimum value and similarity.
-     *
-     * @param mapEntry          The current minimum entry of the nearest neighbours map.
-     * @param nearestNeighbours A map filled with the nearest neighbours.
-     * @param similarity        The similarity of the user.
-     * @param currentUser       The current user to check.
-     * @param threshold         The minimum similarity threshold.
-     * @return Returns the nearest neighbours map.
-     */
-    private Map<User, Double> checkToInsertOrRemoveNeighbour(Map.Entry<User, Double> mapEntry, Map<User, Double> nearestNeighbours, double similarity, User currentUser, boolean reversed, Double threshold) {
-        double value = 0;
-
-        if (reversed) {
-            nearestNeighbours = reversedCheckToInsertOrRemoveNeighbour(mapEntry, nearestNeighbours, similarity, currentUser, threshold);
-        } else {
-            //Loop through nearestNeighbours TreeMap and get lowest similarity
-            for (Map.Entry<User, Double> entry : nearestNeighbours.entrySet()) {
-                if (mapEntry == null || mapEntry.getValue() > entry.getValue()) {
-                    mapEntry = entry;
-                    value = mapEntry.getValue();
-                }
-            }
-            //Check user rating versus lowest similarity.
-            if (value <= similarity) {
-                //Remove lowest similarity.
-                nearestNeighbours.remove(mapEntry.getKey());
-                //Check threshold and add user to nearestNeighbours TreeMap
-                if (threshold == null) {
-                    nearestNeighbours.put(currentUser, similarity);
-                } else if (similarity >= threshold) {
-                    nearestNeighbours.put(currentUser, similarity);
-                }
-            }
-        }
-
-        return nearestNeighbours;
-    }
-
-    private Map<User, Double> reversedCheckToInsertOrRemoveNeighbour(Map.Entry<User, Double> mapEntry, Map<User, Double> nearestNeighbours, double similarity, User currentUser, Double threshold) {
-        double value = 0;
-        //Loop through nearestNeighbours TreeMap and get lowest similarity
-        for (Map.Entry<User, Double> entry : nearestNeighbours.entrySet()) {
-            if (mapEntry == null || mapEntry.getValue() < entry.getValue()) {
-                mapEntry = entry;
-                value = mapEntry.getValue();
-            }
-        }
-        //Check user rating versus lowest similarity.
-        if(value >= similarity){
-            //Remove lowest similarity.
-            nearestNeighbours.remove(mapEntry.getKey());
-            //Check threshold and add user to nearestNeighbours TreeMap
-            if(threshold == null) {
-                nearestNeighbours.put(currentUser, similarity);
-            }
-        }
-        return nearestNeighbours;
-    }
-
-
-
 
 
     //Method for sorting the TreeMap based on values
@@ -130,4 +51,7 @@ public class NeighbourPredictor {
         sortedByValues.putAll(map);
         return sortedByValues;
     }
-}
+
+
+    }
+
