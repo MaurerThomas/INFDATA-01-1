@@ -2,11 +2,14 @@ package strategy;
 
 import datastructure.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Euclidean implements INearestNeighbourAlgorithm {
     /**
      * Calculate the similarity between two users.
+     *
      * @param userOne The first user
      * @param userTwo The second user
      * @return Euclidean distance
@@ -18,7 +21,7 @@ public class Euclidean implements INearestNeighbourAlgorithm {
         Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
         double calculatedValuesSum = 0;
 
-        for(Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {
+        for (Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {
             double calculated;
 
             if (userTwoTreeMap.containsKey(me.getKey())) {

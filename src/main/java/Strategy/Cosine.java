@@ -2,11 +2,14 @@ package strategy;
 
 import datastructure.User;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Cosine implements INearestNeighbourAlgorithm {
     /**
      * Calculate the similarity between two users.
+     *
      * @param userOne The first user
      * @param userTwo The second user
      * @return Cosine similarity
@@ -26,19 +29,19 @@ public class Cosine implements INearestNeighbourAlgorithm {
         Set<Integer> keys = new HashSet<>(userOneTreeMap.keySet());
         keys.addAll(userTwoTreeMap.keySet());
 
-        for(int movieId : keys) {
+        for (int movieId : keys) {
             float userOneRating;
             float userTwoRating;
 
-            if(userOneTreeMap.containsKey(movieId)){
+            if (userOneTreeMap.containsKey(movieId)) {
                 userOneRating = userOneTreeMap.get(movieId);
-            }else {
+            } else {
                 userOneRating = 0;
             }
 
-            if(userTwoTreeMap.containsKey(movieId)){
+            if (userTwoTreeMap.containsKey(movieId)) {
                 userTwoRating = userTwoTreeMap.get(movieId);
-            }else {
+            } else {
                 userTwoRating = 0;
             }
 
