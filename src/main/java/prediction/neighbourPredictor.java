@@ -3,13 +3,9 @@ package prediction;
 import datastructure.User;
 import strategy.INearestNeighbourAlgorithm;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by Thomas on 16-3-2016.
- */
 public class NeighbourPredictor {
 
     /**
@@ -34,24 +30,5 @@ public class NeighbourPredictor {
         return nearestNeighbourAlgorithm(targetUser, users, calculationMethod, maxNeighbours, reversed, null);
     }
 
-
-    //Method for sorting the TreeMap based on values
-    public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
-        Comparator<K> valueComparator = new Comparator<K>() {
-            public int compare(K k1, K k2) {
-                int compare = map.get(k1).compareTo(map.get(k2));
-                if (compare == 0)
-                    return 1;
-                else
-                    return compare;
-            }
-        };
-
-        Map<K, V> sortedByValues = new TreeMap<>(valueComparator);
-        sortedByValues.putAll(map);
-        return sortedByValues;
-    }
-
-
-    }
+}
 

@@ -8,6 +8,7 @@ public class Pearson implements INearestNeighbourAlgorithm {
 
     /**
      * Calculate the similarity between two users.
+     *
      * @param userOne The first user
      * @param userTwo The second user
      * @return Pearson coefficient
@@ -25,7 +26,7 @@ public class Pearson implements INearestNeighbourAlgorithm {
         Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
         Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
 
-        for(Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()){
+        for (Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {
             if (userTwoTreeMap.containsKey(me.getKey())) {
                 float userOneRating = me.getValue();
                 float userTwoRating = userTwoTreeMap.get(me.getKey());

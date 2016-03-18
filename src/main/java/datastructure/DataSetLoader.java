@@ -12,24 +12,23 @@ import java.util.logging.Logger;
 public class DataSetLoader {
     /**
      * Load the dataset from a datafile.
+     *
      * @return A map with the userId and User object.
      * @throws IOException
      */
-    public Map<Integer, User> loadDataSet() throws IOException {
+    public Map<Integer, User> loadDataSet(String dataset, String seperator) throws IOException {
         // Make our logger to log stuff.
         Logger logger = Logger.getLogger("myLogger");
         // Make our TreeMap with a list as values.
         Map<Integer, User> userMap = new TreeMap<>();
         // Create a new file.
         System.getProperty("user.dir");
-        File file = new File("data/userItem.data");
-        //File file = new File("data/MovieLens100k/u.data");
+        File file = new File(dataset);
         // Go through each line and create new users with preferences.
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] details = line.split(",");
-                //String[] details = line.split("\\t");
+                String[] details = line.split(seperator);
                 int userId = Integer.parseInt(details[0]);
                 int movieId = Integer.parseInt(details[1]);
                 float rating = Float.parseFloat(details[2]);
@@ -41,7 +40,7 @@ public class DataSetLoader {
                     userMap.put(userId, newUser);
                 } else {
                     User existingUser = userMap.get(userId);
-                    existingUser.addMovieRatingsToUser(movieId, rating);
+                    existingUser.addMovieRating(movieId, rating);
                 }
             }
         } catch (FileNotFoundException e) {

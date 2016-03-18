@@ -7,12 +7,12 @@ import java.util.Map;
 /**
  * Created by Thomas on 17-3-2016.
  */
-public class GetLowestSimilarity {
+public class LowestSimilarity {
     private Map.Entry<User, Double> mapEntry;
     private Map<User, Double> nearestNeighbours;
     private double value;
 
-    public GetLowestSimilarity(Map.Entry<User, Double> mapEntry, Map<User, Double> nearestNeighbours, double value) {
+    public LowestSimilarity(Map.Entry<User, Double> mapEntry, Map<User, Double> nearestNeighbours, double value) {
         this.mapEntry = mapEntry;
         this.nearestNeighbours = nearestNeighbours;
         this.value = value;
@@ -26,7 +26,7 @@ public class GetLowestSimilarity {
         return value;
     }
 
-    public GetLowestSimilarity invoke() {
+    public LowestSimilarity invoke() {
         //Loop through nearestNeighbours TreeMap and get lowest similarity
         for (Map.Entry<User, Double> entry : nearestNeighbours.entrySet()) {
             if (mapEntry == null || mapEntry.getValue() > entry.getValue()) {

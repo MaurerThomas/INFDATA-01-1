@@ -22,7 +22,7 @@ public class User implements Comparable<User> {
         return userId - o.userId;
     }
 
-    public void addMovieRatingsToUser(int movieId, float rating) {
+    public void addMovieRating(int movieId, float rating) {
         movieRatingsFromUser.put(movieId, rating);
     }
 

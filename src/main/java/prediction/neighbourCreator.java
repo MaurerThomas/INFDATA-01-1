@@ -51,21 +51,21 @@ public class NeighbourCreator {
     /**
      * Check whether to insert or remove a neighbour based on the minimum value and similarity.
      *
-     * @param mapEntry          The current minimum entry of the nearest neighbours map.
-     * @param similarity        The similarity of the user.
-     * @param currentUser       The current user to check.
+     * @param mapEntry    The current minimum entry of the nearest neighbours map.
+     * @param similarity  The similarity of the user.
+     * @param currentUser The current user to check.
      * @return Returns the nearest neighbours map.
      */
-    private Map<User, Double> checkToInsertOrRemoveNeighbour(Map.Entry<User, Double> mapEntry,  User currentUser, double similarity) {
+    private Map<User, Double> checkToInsertOrRemoveNeighbour(Map.Entry<User, Double> mapEntry, User currentUser, double similarity) {
         if (reversed) {
             nearestNeighbours = reversedCheckToInsertOrRemoveNeighbour(mapEntry, currentUser, similarity);
         } else {
-            GetLowestSimilarity getLowestSimilarity = new GetLowestSimilarity(mapEntry, nearestNeighbours, value).invoke();
-            value = getLowestSimilarity.getValue();
+            LowestSimilarity lowestSimilarity = new LowestSimilarity(mapEntry, nearestNeighbours, value).invoke();
+            value = lowestSimilarity.getValue();
             //Check user rating versus lowest similarity.
             if (value <= similarity) {
                 //Remove lowest similarity.
-                nearestNeighbours.remove(getLowestSimilarity.getMapEntry().getKey());
+                nearestNeighbours.remove(lowestSimilarity.getMapEntry().getKey());
                 //Check threshold and add user to nearestNeighbours TreeMap
                 if (threshold == null) {
                     nearestNeighbours.put(currentUser, similarity);
@@ -86,11 +86,11 @@ public class NeighbourCreator {
             }
         }
         //Check user rating versus lowest similarity.
-        if(value >= similarity){
+        if (value >= similarity) {
             //Remove lowest similarity.
             nearestNeighbours.remove(mapEntry.getKey());
             //Check threshold and add user to nearestNeighbours TreeMap
-            if(threshold == null) {
+            if (threshold == null) {
                 nearestNeighbours.put(currentUser, similarity);
             }
         }
