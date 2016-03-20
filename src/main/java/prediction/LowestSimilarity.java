@@ -4,9 +4,6 @@ import datastructure.User;
 
 import java.util.Map;
 
-/**
- * Created by Thomas on 17-3-2016.
- */
 public class LowestSimilarity {
     private Map.Entry<User, Double> mapEntry;
     private Map<User, Double> nearestNeighbours;

@@ -17,24 +17,31 @@ public class RatingPredictor {
     public double getPredictedRating(int movieId, Map<User, Double> nearestNeighbours) {
         Set<User> userSet = new HashSet<>(nearestNeighbours.keySet());
         Map<Integer, Float> movieRatingsFromUser;
-        double totalSimularity = 0;
-        double simularityTimesRating = 0;
+        double totalSimilarity = 0;
+        double similarityTimesRating = 0;
 
         for (User neighbour : userSet) {
             movieRatingsFromUser = neighbour.getTreemap();
 
             if (movieRatingsFromUser.get(movieId) != null) {
                 float userRating = neighbour.getMovieRating(movieId);
-                double simularity = nearestNeighbours.get(neighbour);
+                double similarity = nearestNeighbours.get(neighbour);
 
-                simularityTimesRating += (simularity * userRating);
-                totalSimularity += simularity;
+                similarityTimesRating += (similarity * userRating);
+                totalSimilarity += similarity;
             }
         }
-        return simularityTimesRating / totalSimularity;
+        return similarityTimesRating / totalSimilarity;
     }
 
-    public Map<Integer, Double> getTopNRatings(Map<User, Double> nearestNeighbours, int minimumNeighours, int maxRatings) {
+    /**
+     * Get the top n predicted ratings for a user
+     * @param nearestNeighbours A map of nearest neighbours
+     * @param minimumNeighbours The number of minimum neighbours that have to had rated a movie.
+     * @param maxRatings the maximum amount of ratings that have to be returned, e.g. top 10.
+     * @return A map of movieId's and predicted ratings, sorted from high to low.
+     */
+    public Map<Integer, Double> getTopNRatings(Map<User, Double> nearestNeighbours, int minimumNeighbours, int maxRatings) {
         Map<Integer, Double> predictedRatingMap = new TreeMap<>();
 
         for (Map.Entry<User, Double> me : nearestNeighbours.entrySet()) {
@@ -44,7 +51,7 @@ public class RatingPredictor {
         }
 
         for (Integer movieId : movieKeys) {
-            if (minimumNeighours < 1 || ratedByAtLeast(movieId, minimumNeighours, nearestNeighbours)) {
+            if (minimumNeighbours < 1 || ratedByAtLeast(movieId, minimumNeighbours, nearestNeighbours)) {
                 double predictedRating = getPredictedRating(movieId, nearestNeighbours);
                 if (predictedRatingMap.size() < maxRatings) {
                     predictedRatingMap.put(movieId, predictedRating);
@@ -63,9 +70,8 @@ public class RatingPredictor {
      * @param map The TreeMap.
      * @param <K> TreeMap Key.
      * @param <V> TreeMap Value.
-     * @return A sorted TreeMap
+     * @return A sorted TreeMap.
      */
-
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list =
                 new LinkedList<>(map.entrySet());
@@ -83,7 +89,14 @@ public class RatingPredictor {
         return result;
     }
 
-    private boolean ratedByAtLeast(int movieId, int minimumNeighours, Map<User, Double> nearestNeighbours) {
+    /**
+     * Check if the given movie is rated by a minimum number of neighbours.
+     * @param movieId The given movie id.
+     * @param minimumNeighbours The number of minimum neighbours that has to be checked.
+     * @param nearestNeighbours A Map of earlier computed neighbours
+     * @return If the movie is rated by more than minimumNeighbours
+     */
+    private boolean ratedByAtLeast(int movieId, int minimumNeighbours, Map<User, Double> nearestNeighbours) {
         int foundCount = 0;
         for (Map.Entry<User, Double> me : nearestNeighbours.entrySet()) {
             User neighbour = me.getKey();
@@ -92,7 +105,7 @@ public class RatingPredictor {
             if (neighbourTreeMap.get(movieId) != null) {
                 foundCount++;
 
-                if (foundCount >= minimumNeighours) {
+                if (foundCount >= minimumNeighbours) {
                     return true;
                 }
             }

@@ -10,13 +10,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataSetLoader {
+
     /**
-     * Load the dataset from a datafile.
      *
+     * @param dataset location and name of the dataset
+     * @param separator separator character that is used in the dataset
      * @return A map with the userId and User object.
      * @throws IOException
      */
-    public Map<Integer, User> loadDataSet(String dataset, String seperator) throws IOException {
+    public Map<Integer, User> loadDataSet(String dataset, String separator) throws IOException {
         // Make our logger to log stuff.
         Logger logger = Logger.getLogger("myLogger");
         // Make our TreeMap with a list as values.
@@ -28,10 +30,11 @@ public class DataSetLoader {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] details = line.split(seperator);
+                String[] details = line.split(separator);
                 int userId = Integer.parseInt(details[0]);
                 int movieId = Integer.parseInt(details[1]);
                 float rating = Float.parseFloat(details[2]);
+
                 // If user does not exist then add preferences.
                 if (!userMap.containsKey(userId)) {
                     Map<Integer, Float> userRatings = new TreeMap<>();
