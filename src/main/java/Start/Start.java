@@ -40,10 +40,9 @@ public class Start {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
 
-        User targetUser = allUsersTreeMap.get(7);
-
         printQuestionNumber(5);
 
+        User targetUser = allUsersTreeMap.get(7);
         System.out.println("Target user 7, threshold 0.35");
         System.out.println("EUCLIDEAN");
         Map<User, Double> nearestNeighbours = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap, EUCLIDEAN, 3, true);
@@ -111,12 +110,12 @@ public class Start {
         targetUser = allUsersTreeMap100k.get(186);
         nearestNeighbours = neighbourPredictor.nearestNeighbourAlgorithm(targetUser, allUsersTreeMap100k, PEARSON, 25, false, 0.35);
         Map<Integer, Double> predictedRatingTopN = ratingPredictor.getTopNRatings(nearestNeighbours, 0, 8);
-        printMovieIdWithPredictedRating(predictedRatingTopN, 0);
+        printMovieIdWithPredictedRating(predictedRatingTopN);
 
         printQuestionNumber(12);
 
         predictedRatingTopN = ratingPredictor.getTopNRatings(nearestNeighbours, 3, 8);
-        printMovieIdWithPredictedRating(predictedRatingTopN, 0);
+        printMovieIdWithPredictedRating(predictedRatingTopN);
     }
 
     private static void printNearestNeighbourWithSimilarity(Map<User, Double> nearestNeighboursRating, int userId) {
@@ -131,8 +130,9 @@ public class Start {
         }
     }
 
-    private static void printMovieIdWithPredictedRating(Map<Integer, Double> predictedRatings, int userId) {
+    private static void printMovieIdWithPredictedRating(Map<Integer, Double> predictedRatings) {
         int counter = 0;
+
         for (Map.Entry<Integer, Double> me : predictedRatings.entrySet()) {
             counter++;
             int movieId = me.getKey();
@@ -144,15 +144,14 @@ public class Start {
 
     private static void printPredictedRating(int movieId, double rating) {
         System.out.println("Predicted rating for item " + movieId + " : " + rating);
-
     }
 
     private static void printQuestionNumber(int questionNumber) {
         String seperator = "----------------------------";
+
         System.out.println(seperator);
         System.out.println("Part 1: question " + questionNumber);
         System.out.println(seperator);
-
     }
 }
 

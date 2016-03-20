@@ -8,11 +8,12 @@ public class RatingPredictor {
     Set<Integer> movieKeys = new HashSet<>();
 
     /**
-     * Get the predicted rating for a targetUser and movie.
+     * Get the predicted rating for a particular movie after already having calculated
+     * the nearest neighbours with a given user.
      *
      * @param movieId The movieId, which has not been rated by the target user yet.
      * @param nearestNeighbours A Map of nearest neighbours.
-     * @return The predicted rating to an item.
+     * @return The predicted rating for an item.
      */
     public double getPredictedRating(int movieId, Map<User, Double> nearestNeighbours) {
         Set<User> userSet = new HashSet<>(nearestNeighbours.keySet());
