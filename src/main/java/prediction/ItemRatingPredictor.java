@@ -1,40 +1,26 @@
 package prediction;
 
-import datastructure.Item;
 import datastructure.User;
 
 import java.util.Map;
 
 public class ItemRatingPredictor {
 
-
-    public double predictedRating(Item itemI, Item itemJ) {
+    public double predictedRating(User user, int itemId, Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie) {
         double numerator = 0;
         double denominator = 0;
+        Map<Integer, ItemDeviation> deviations = deviationPerMovie.get(itemId);
 
-        // foreach item j that user u rated
-        for (Map.Entry<Integer, Float> me : itemI.getUserItemRatings().entrySet()) {
-            int userId = me.getKey();
+        for(Map.Entry<Integer, Float> userRatingEntry : user.getRatings().entrySet()) {
+            int itemIId = userRatingEntry.getKey();
+            float userRatingForJ = userRatingEntry.getValue();
+            ItemDeviation deviationBetweenIAndJ = deviations.get(itemIId);
+            double dev = deviationBetweenIAndJ.getDeviation();
+            int numberOfUsers = deviationBetweenIAndJ.getNumberOfUsers();
 
-            if (userExistsInItemJ(itemI, itemJ, userId)){
-
-                //get deviation between i and j
-                //numerator += (rating of u for j + dev between i and j) * howManyUsers
-                //denominator += howManyUsers
-
-            }
-
-
+            numerator += (userRatingForJ + dev) * numberOfUsers;
+            denominator += numberOfUsers;
         }
-
         return numerator / denominator;
     }
-
-    private boolean userExistsInItemJ(Item itemI, Item itemJ, int userId) {
-        Map<Integer, Float> itemJRatings = itemJ.getUserItemRatings();
-        return itemJRatings.containsKey(userId) && itemI.getItemId() != itemJ.getItemId();
-    }
-
-
-
 }

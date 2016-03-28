@@ -8,7 +8,7 @@ public class ItemDeviation {
     private int numberOfUsers;
     private double deviation;
 
-    public double calculateItemDeviation(Item itemI, Item itemJ, boolean reversed) {
+    public double calculateItemDeviation(Item itemI, Item itemJ) {
         double currentDeviation = 0;
         Map<Integer, Float> itemJRatings = itemJ.getUserItemRatings();
 
@@ -18,14 +18,10 @@ public class ItemDeviation {
 
             if(userExistsInItemJ(itemI, itemJ, userId)){
                 float itemJRating = itemJRatings.get(userId);
-                if (reversed) {
-                    currentDeviation += (itemJRating - itemIRating);
-                } else {
-                    currentDeviation += (itemIRating - itemJRating);
-                }
+                currentDeviation += (itemIRating - itemJRating);
                 numberOfUsers++;
             } else {
-                break;
+                continue;
             }
         }
 
@@ -35,7 +31,6 @@ public class ItemDeviation {
             deviation = currentDeviation / numberOfUsers;
             return deviation;
         }
-
     }
 
     private boolean userExistsInItemJ(Item itemI, Item itemJ, int userId) {

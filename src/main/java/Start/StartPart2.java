@@ -1,8 +1,11 @@
 package start;
 
+import datastructure.DataSetLoader;
 import datastructure.DataSetLoaderPart2;
 import datastructure.Item;
+import datastructure.User;
 import prediction.ItemDeviation;
+import prediction.ItemRatingPredictor;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,31 +19,37 @@ public class StartPart2 {
     }
 
     public static void main(String[] args) {
+        DataSetLoader dsl = new DataSetLoader();
         DataSetLoaderPart2 dataSetLoaderPart2 = new DataSetLoaderPart2();
         Map<Integer, Item> allItemsTreeMap = new TreeMap<>();
         Map<Integer, Item> allItemsTreeMap100k = new TreeMap<>();
-        Map<Integer, Map<Integer, ItemDeviation>> itemWithItemDeviations = new TreeMap<>();
-        Map<Integer, ItemDeviation> calculatedItemDeviations = new TreeMap<>();
+        Map<Integer, User> allUsersTreeMap = new TreeMap<>();
+        Map<Integer, User> allUsersTreeMap100k = new TreeMap<>();
+        Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie = new TreeMap<>();
         Logger logger = Logger.getLogger("myLogger");
+        ItemRatingPredictor itemRatingPredictor = new ItemRatingPredictor();
 
         try {
             allItemsTreeMap = dataSetLoaderPart2.loadDataSet("data/userItem.data", ",");
+            allUsersTreeMap = dsl.loadDataSet("data/userItem.data", ",");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
 
-        Item itemI = allItemsTreeMap.get(101);
-        for (Map.Entry<Integer, Item> me : allItemsTreeMap.entrySet()) {
-            ItemDeviation itemDeviation = new ItemDeviation();
+        for (Item itemI : allItemsTreeMap.values()) {
+            Map<Integer, ItemDeviation> calculatedItemDeviations = new TreeMap<>();
 
-            Item itemJ = me.getValue();
-            itemDeviation.calculateItemDeviation(itemI, itemJ, false);
+            for (Item itemJ : allItemsTreeMap.values()) {
+                ItemDeviation itemDeviation = new ItemDeviation();
 
-            calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
-            itemWithItemDeviations.put(itemI.getItemId(), calculatedItemDeviations);
+                itemDeviation.calculateItemDeviation(itemI, itemJ);
+                calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
+            }
+            deviationPerMovie.put(itemI.getItemId(), calculatedItemDeviations);
         }
 
-        System.out.println(itemWithItemDeviations.toString());
+        User targetUser = allUsersTreeMap.get(3);
+        double ratingkje = itemRatingPredictor.predictedRating(targetUser, 105, deviationPerMovie);
+        System.out.println(ratingkje);
     }
-
 }
