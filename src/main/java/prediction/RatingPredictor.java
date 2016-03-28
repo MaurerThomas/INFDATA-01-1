@@ -22,7 +22,7 @@ public class RatingPredictor {
         double similarityTimesRating = 0;
 
         for (User neighbour : userSet) {
-            movieRatingsFromUser = neighbour.getTreemap();
+            movieRatingsFromUser = neighbour.getRatings();
 
             if (movieRatingsFromUser.get(movieId) != null) {
                 float userRating = neighbour.getMovieRating(movieId);
@@ -47,7 +47,7 @@ public class RatingPredictor {
 
         for (Map.Entry<User, Double> me : nearestNeighbours.entrySet()) {
             User user = me.getKey();
-            Map<Integer, Float> userRatings = user.getTreemap();
+            Map<Integer, Float> userRatings = user.getRatings();
             movieKeys.addAll(userRatings.keySet());
         }
 
@@ -101,7 +101,7 @@ public class RatingPredictor {
         int foundCount = 0;
         for (Map.Entry<User, Double> me : nearestNeighbours.entrySet()) {
             User neighbour = me.getKey();
-            Map<Integer, Float> neighbourTreeMap = neighbour.getTreemap();
+            Map<Integer, Float> neighbourTreeMap = neighbour.getRatings();
 
             if (neighbourTreeMap.get(movieId) != null) {
                 foundCount++;

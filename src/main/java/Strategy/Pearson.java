@@ -23,8 +23,8 @@ public class Pearson implements INearestNeighbourAlgorithm {
         int n = 0;
         double denominator;
 
-        Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
-        Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
+        Map<Integer, Float> userOneTreeMap = userOne.getRatings();
+        Map<Integer, Float> userTwoTreeMap = userTwo.getRatings();
 
         for (Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {
             if (userTwoTreeMap.containsKey(me.getKey())) {

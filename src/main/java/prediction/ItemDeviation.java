@@ -1,6 +1,7 @@
 package prediction;
 
 import datastructure.Item;
+
 import java.util.Map;
 
 public class ItemDeviation {
@@ -15,7 +16,7 @@ public class ItemDeviation {
             float itemIRating = me.getValue();
             int userId = me.getKey();
 
-            if(userExistsInItemJ(itemI, itemJ, itemJRatings, userId)){
+            if(userExistsInItemJ(itemI, itemJ, userId)){
                 float itemJRating = itemJRatings.get(userId);
                 if (reversed) {
                     currentDeviation += (itemJRating - itemIRating);
@@ -27,20 +28,18 @@ public class ItemDeviation {
                 break;
             }
         }
-        deviation = currentDeviation / numberOfUsers;
 
-        return checkIfDeviationIsNotANumber();
-    }
-
-    private double checkIfDeviationIsNotANumber() {
-        if (!Double.isNaN(deviation)) {
-            return deviation;
-        } else {
+        if(Double.doubleToRawLongBits(currentDeviation) == 0){
             return 0;
+        }else{
+            deviation = currentDeviation / numberOfUsers;
+            return deviation;
         }
+
     }
 
-    private boolean userExistsInItemJ(Item itemI, Item itemJ, Map<Integer, Float> itemJRatings, int userId) {
+    private boolean userExistsInItemJ(Item itemI, Item itemJ, int userId) {
+        Map<Integer, Float> itemJRatings = itemJ.getUserItemRatings();
         return itemJRatings.containsKey(userId) && itemI.getItemId() != itemJ.getItemId();
     }
 

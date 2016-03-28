@@ -17,8 +17,8 @@ public class Euclidean implements INearestNeighbourAlgorithm {
     @Override
     public double calculate(User userOne, User userTwo) {
         List<Double> calculatedValues = new ArrayList<>();
-        Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
-        Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
+        Map<Integer, Float> userOneTreeMap = userOne.getRatings();
+        Map<Integer, Float> userTwoTreeMap = userTwo.getRatings();
         double calculatedValuesSum = 0;
 
         for (Map.Entry<Integer, Float> me : userOneTreeMap.entrySet()) {

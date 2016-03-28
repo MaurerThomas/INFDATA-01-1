@@ -30,7 +30,7 @@ public class User implements Comparable<User> {
         return movieRatingsFromUser.get(movieId);
     }
 
-    public Map<Integer, Float> getTreemap() {
+    public Map<Integer, Float> getRatings() {
         return movieRatingsFromUser;
     }
 

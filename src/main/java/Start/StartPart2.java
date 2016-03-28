@@ -28,15 +28,19 @@ public class StartPart2 {
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
-        Item itemI = allItemsTreeMap.get(101);
 
+        Item itemI = allItemsTreeMap.get(101);
         for (Map.Entry<Integer, Item> me : allItemsTreeMap.entrySet()) {
             ItemDeviation itemDeviation = new ItemDeviation();
-            Item itemJ = me.getValue();
 
+            Item itemJ = me.getValue();
             itemDeviation.calculateItemDeviation(itemI, itemJ, false);
+
             calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
             itemWithItemDeviations.put(itemI.getItemId(), calculatedItemDeviations);
         }
+
+        System.out.println(itemWithItemDeviations.toString());
     }
+
 }

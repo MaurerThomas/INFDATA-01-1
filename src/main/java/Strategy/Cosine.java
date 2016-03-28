@@ -23,8 +23,8 @@ public class Cosine implements INearestNeighbourAlgorithm {
         float dotProductXY = 0;
         double denominator;
 
-        Map<Integer, Float> userOneTreeMap = userOne.getTreemap();
-        Map<Integer, Float> userTwoTreeMap = userTwo.getTreemap();
+        Map<Integer, Float> userOneTreeMap = userOne.getRatings();
+        Map<Integer, Float> userTwoTreeMap = userTwo.getRatings();
 
         Set<Integer> keys = new HashSet<>(userOneTreeMap.keySet());
         keys.addAll(userTwoTreeMap.keySet());
