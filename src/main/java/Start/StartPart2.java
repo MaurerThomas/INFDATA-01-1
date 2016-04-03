@@ -32,6 +32,8 @@ public class StartPart2 {
         try {
             allItemsTreeMap = dataSetLoaderPart2.loadDataSet("data/userItem.data", ",");
             allUsersTreeMap = dsl.loadDataSet("data/userItem.data", ",");
+            allItemsTreeMap100k = dataSetLoaderPart2.loadDataSet("data/MovieLens100k/u.data", "\\t");
+            allUsersTreeMap100k = dsl.loadDataSet("data/MovieLens100k/u.data", "\\t");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
@@ -48,8 +50,36 @@ public class StartPart2 {
             deviationPerMovie.put(itemI.getItemId(), calculatedItemDeviations);
         }
 
-        User targetUser = allUsersTreeMap.get(3);
-        double ratingkje = itemRatingPredictor.predictedRating(targetUser, 105, deviationPerMovie);
-        System.out.println(ratingkje);
+        User targetUser = allUsersTreeMap.get(7);
+        double ratingkje = itemRatingPredictor.predictedRating(targetUser, 101, deviationPerMovie);
+        System.out.println(
+               " 101: " +  ratingkje +
+               " 103: " + itemRatingPredictor.predictedRating(targetUser, 103, deviationPerMovie)
+               + " 106: " + itemRatingPredictor.predictedRating(targetUser, 106, deviationPerMovie)
+        );
+
+
+
+        deviationPerMovie.clear();
+        for (Item itemI : allItemsTreeMap100k.values()) {
+            Map<Integer, ItemDeviation> calculatedItemDeviations = new TreeMap<>();
+
+            for (Item itemJ : allItemsTreeMap100k.values()) {
+                ItemDeviation itemDeviation = new ItemDeviation();
+
+                itemDeviation.calculateItemDeviation(itemI, itemJ);
+                calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
+            }
+            deviationPerMovie.put(itemI.getItemId(), calculatedItemDeviations);
+        }
+
+
+        targetUser = allUsersTreeMap100k.get(186);
+        long time = System.nanoTime();
+
+        Map<Integer, Double> topNRatings = itemRatingPredictor.getTopNRatings(targetUser, deviationPerMovie, allItemsTreeMap100k, 5);
+        time = System.nanoTime() - time;
+        System.out.println(topNRatings);
+        System.out.println("Calculation time Top N: " + (time / 1000000)  + "ms");
     }
 }

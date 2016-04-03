@@ -60,12 +60,12 @@ public class NeighbourCreator {
         if (reversed) {
             nearestNeighbours = reversedCheckToInsertOrRemoveNeighbour(mapEntry, currentUser, similarity);
         } else {
-            LowestSimilarity LowestSimilarity = new LowestSimilarity(mapEntry, nearestNeighbours, value).invoke();
-            value = LowestSimilarity.getValue();
+            LowestSimilarity lowestSimilarity = new LowestSimilarity(mapEntry, nearestNeighbours, value).invoke();
+            value = lowestSimilarity.getValue();
             //Check user rating versus lowest similarity.
             if (value <= similarity) {
                 //Remove lowest similarity.
-                nearestNeighbours.remove(LowestSimilarity.getMapEntry().getKey());
+                nearestNeighbours.remove(lowestSimilarity.getMapEntry().getKey());
                 //Check threshold and add user to nearestNeighbours TreeMap
                 if (threshold == null) {
                     nearestNeighbours.put(currentUser, similarity);

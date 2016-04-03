@@ -51,9 +51,10 @@ public class RatingPredictor {
             movieKeys.addAll(userRatings.keySet());
         }
 
-        for (Integer movieId : movieKeys) {
+        for (int movieId : movieKeys) {
             if (minimumNeighbours < 1 || ratedByAtLeast(movieId, minimumNeighbours, nearestNeighbours)) {
                 double predictedRating = getPredictedRating(movieId, nearestNeighbours);
+
                 if (predictedRatingMap.size() < maxRatings) {
                     predictedRatingMap.put(movieId, predictedRating);
                 } else {
@@ -61,34 +62,9 @@ public class RatingPredictor {
                 }
             }
         }
-        return sortByValue(predictedRatingMap);
+        return TreeMapSorter.sortByValue(predictedRatingMap);
     }
 
-    /**
-     * Returns a sorted TreeMap from highest to lowest.
-     * Source: http://stackoverflow.com/a/2581754
-     *
-     * @param map The TreeMap.
-     * @param <K> TreeMap Key.
-     * @param <V> TreeMap Value.
-     * @return A sorted TreeMap.
-     */
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
-        List<Map.Entry<K, V>> list =
-                new LinkedList<>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-            @Override
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-
-        Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
 
     /**
      * Check if the given movie is rated by a minimum number of neighbours.

@@ -20,8 +20,6 @@ public class ItemDeviation {
                 float itemJRating = itemJRatings.get(userId);
                 currentDeviation += (itemIRating - itemJRating);
                 numberOfUsers++;
-            } else {
-                continue;
             }
         }
 
