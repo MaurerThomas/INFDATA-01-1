@@ -12,8 +12,7 @@ import java.util.logging.Logger;
 
 public class DataSetLoaderPart2 {
     /**
-     *
-     * @param dataset location and name of the dataset
+     * @param dataset   location and name of the dataset
      * @param separator separator character that is used in the dataset
      * @return A map with the itemId and Item object.
      * @throws IOException

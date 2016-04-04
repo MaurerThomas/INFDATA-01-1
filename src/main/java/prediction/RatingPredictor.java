@@ -2,7 +2,10 @@ package prediction;
 
 import datastructure.User;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class RatingPredictor {
     Set<Integer> movieKeys = new HashSet<>();
@@ -11,7 +14,7 @@ public class RatingPredictor {
      * Get the predicted rating for a particular movie after already having calculated
      * the nearest neighbours with a given user.
      *
-     * @param movieId The movieId, which has not been rated by the target user yet.
+     * @param movieId           The movieId, which has not been rated by the target user yet.
      * @param nearestNeighbours A Map of nearest neighbours.
      * @return The predicted rating for an item.
      */
@@ -37,9 +40,10 @@ public class RatingPredictor {
 
     /**
      * Get the top n predicted ratings for a user
+     *
      * @param nearestNeighbours A map of nearest neighbours
      * @param minimumNeighbours The number of minimum neighbours that have to had rated a movie.
-     * @param maxRatings the maximum amount of ratings that have to be returned, e.g. top 10.
+     * @param maxRatings        the maximum amount of ratings that have to be returned, e.g. top 10.
      * @return A map of movieId's and predicted ratings, sorted from high to low.
      */
     public Map<Integer, Double> getTopNRatings(Map<User, Double> nearestNeighbours, int minimumNeighbours, int maxRatings) {
@@ -68,7 +72,8 @@ public class RatingPredictor {
 
     /**
      * Check if the given movie is rated by a minimum number of neighbours.
-     * @param movieId The given movie id.
+     *
+     * @param movieId           The given movie id.
      * @param minimumNeighbours The number of minimum neighbours that has to be checked.
      * @param nearestNeighbours A Map of earlier computed neighbours
      * @return If the movie is rated by more than minimumNeighbours

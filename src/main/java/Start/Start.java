@@ -24,7 +24,7 @@ public class Start {
 
     private Start() {
     }
-    
+
     public static void main(String[] args) {
         DataSetLoader dsl = new DataSetLoader();
         Map<Integer, User> allUsersTreeMap = new TreeMap<>();

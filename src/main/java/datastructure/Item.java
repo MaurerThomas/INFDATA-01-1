@@ -7,7 +7,7 @@ public class Item {
     private int itemId;
     private Map<Integer, Float> userItemRatings;
 
-    public Item(int itemId, Map<Integer, Float> userItemRatings ) {
+    public Item(int itemId, Map<Integer, Float> userItemRatings) {
         this.itemId = itemId;
         this.userItemRatings = userItemRatings;
     }

@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StartPart2 {
-    private StartPart2(){
+    private StartPart2() {
 
     }
 
@@ -25,9 +25,9 @@ public class StartPart2 {
         Map<Integer, Item> allItemsTreeMap100k = new TreeMap<>();
         Map<Integer, User> allUsersTreeMap = new TreeMap<>();
         Map<Integer, User> allUsersTreeMap100k = new TreeMap<>();
-        Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie = new TreeMap<>();
         Logger logger = Logger.getLogger("myLogger");
         ItemRatingPredictor itemRatingPredictor = new ItemRatingPredictor();
+        ItemDeviation itemDeviation = new ItemDeviation();
 
         try {
             allItemsTreeMap = dataSetLoaderPart2.loadDataSet("data/userItem.data", ",");
@@ -38,48 +38,47 @@ public class StartPart2 {
             logger.log(Level.SEVERE, "Could not init: ", e);
         }
 
-        for (Item itemI : allItemsTreeMap.values()) {
-            Map<Integer, ItemDeviation> calculatedItemDeviations = new TreeMap<>();
-
-            for (Item itemJ : allItemsTreeMap.values()) {
-                ItemDeviation itemDeviation = new ItemDeviation();
-
-                itemDeviation.calculateItemDeviation(itemI, itemJ);
-                calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
-            }
-            deviationPerMovie.put(itemI.getItemId(), calculatedItemDeviations);
-        }
+        printQuestionNumber(6);
+        itemDeviation.calculateItemDeviations(allItemsTreeMap);
 
         User targetUser = allUsersTreeMap.get(7);
-        double ratingkje = itemRatingPredictor.predictedRating(targetUser, 101, deviationPerMovie);
-        System.out.println(
-               " 101: " +  ratingkje +
-               " 103: " + itemRatingPredictor.predictedRating(targetUser, 103, deviationPerMovie)
-               + " 106: " + itemRatingPredictor.predictedRating(targetUser, 106, deviationPerMovie)
-        );
+        System.out.println("Predicted ratings for user 7");
+        System.out.println("Predicted rating for item 101: " + itemRatingPredictor.predictRating(targetUser, 101, itemDeviation.getDeviationPerMovie()));
+        System.out.println("Predicted rating for item 103: " + itemRatingPredictor.predictRating(targetUser, 103, itemDeviation.getDeviationPerMovie()));
+        System.out.println("Predicted rating for item 106: " + itemRatingPredictor.predictRating(targetUser, 106, itemDeviation.getDeviationPerMovie()));
 
+        targetUser = allUsersTreeMap.get(3);
+        System.out.println("Predicted ratings for user 3");
+        System.out.println("Predicted rating for item 103: " + itemRatingPredictor.predictRating(targetUser, 103, itemDeviation.getDeviationPerMovie()));
+        System.out.println("Predicted rating for item 105: " + itemRatingPredictor.predictRating(targetUser, 105, itemDeviation.getDeviationPerMovie()));
 
+        printQuestionNumber(8);
+        System.out.println("User 3 rates item 105 with 4.0");
 
-        deviationPerMovie.clear();
-        for (Item itemI : allItemsTreeMap100k.values()) {
-            Map<Integer, ItemDeviation> calculatedItemDeviations = new TreeMap<>();
+        Item item105 = allItemsTreeMap.get(105);
+        itemDeviation.addRating(3, 4.0f, item105, allItemsTreeMap);
+        targetUser = allUsersTreeMap.get(7);
+        System.out.println("Updated predicted rating for item 101: " + itemRatingPredictor.predictRating(targetUser, 101, itemDeviation.getDeviationPerMovie()));
+        System.out.println("Updated predicted rating for item 103: " + itemRatingPredictor.predictRating(targetUser, 103, itemDeviation.getDeviationPerMovie()));
+        System.out.println("Updated predicted rating for item 106: " + itemRatingPredictor.predictRating(targetUser, 106, itemDeviation.getDeviationPerMovie()));
 
-            for (Item itemJ : allItemsTreeMap100k.values()) {
-                ItemDeviation itemDeviation = new ItemDeviation();
-
-                itemDeviation.calculateItemDeviation(itemI, itemJ);
-                calculatedItemDeviations.put(itemJ.getItemId(), itemDeviation);
-            }
-            deviationPerMovie.put(itemI.getItemId(), calculatedItemDeviations);
-        }
-
-
+        printQuestionNumber(10);
+        Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie100k = itemDeviation.calculateItemDeviations(allItemsTreeMap100k);
         targetUser = allUsersTreeMap100k.get(186);
         long time = System.nanoTime();
 
-        Map<Integer, Double> topNRatings = itemRatingPredictor.getTopNRatings(targetUser, deviationPerMovie, allItemsTreeMap100k, 5);
+        Map<Integer, Double> topNRatings = itemRatingPredictor.getTopNRatings(targetUser, deviationPerMovie100k, allItemsTreeMap100k, 5);
         time = System.nanoTime() - time;
         System.out.println(topNRatings);
-        System.out.println("Calculation time Top N: " + (time / 1000000)  + "ms");
+        System.out.println("Calculation time Top N: " + (time / 1000000) + "ms");
+    }
+
+    private static void printQuestionNumber(int questionNumber) {
+        String seperator = "----------------------------";
+        System.out.println(seperator);
+        System.out.println("Part 2: question " + questionNumber);
+        System.out.println(seperator);
     }
 }
+
+
