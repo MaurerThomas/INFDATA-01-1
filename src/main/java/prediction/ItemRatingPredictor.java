@@ -28,10 +28,10 @@ public class ItemRatingPredictor {
     }
 
 
-    public Map<Integer, Double> getTopNRatings(User user, Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie, Map<Integer, Item> allItemsTreeMap, int maxRatings) {
+    public List<String> getTopNRatings(User user, Map<Integer, Map<Integer, ItemDeviation>> deviationPerMovie, Map<Integer, Item> allItemsTreeMap, int maxRatings) {
         Map<Integer, Double> tempPredictedRatingMap = new TreeMap<>();
-        Map<Integer, Double> predictedRatingMap = new TreeMap<>();
         List<Integer> listOfNotRatedItems = new ArrayList<>();
+        List<String> sortedTopNRatings = new ArrayList<>();
 
         //Get user's rated items
         Set<Integer> userItemSet = user.getRatings().keySet();
@@ -45,21 +45,23 @@ public class ItemRatingPredictor {
         }
 
         for (int itemId : listOfNotRatedItems) {
-            double predictedRating = predictRating(user, itemId, deviationPerMovie);
-            tempPredictedRatingMap.put(itemId, predictedRating);
+            if (!Double.isNaN(predictRating(user, itemId, deviationPerMovie))) {
+                double predictedRating = predictRating(user, itemId, deviationPerMovie);
+                tempPredictedRatingMap.put(itemId, predictedRating);
+            }
         }
-
         tempPredictedRatingMap = TreeMapSorter.sortByValue(tempPredictedRatingMap);
 
         int count = 0;
         for (Map.Entry<Integer, Double> tempPredictedRatingEntry : tempPredictedRatingMap.entrySet()) {
             if (count < maxRatings) {
-                predictedRatingMap.put(tempPredictedRatingEntry.getKey(), tempPredictedRatingEntry.getValue());
-
+                sortedTopNRatings.add(tempPredictedRatingEntry.getKey() +" "+ tempPredictedRatingEntry.getValue());
                 count++;
+            } else {
+                break;
             }
         }
 
-        return predictedRatingMap;
+        return sortedTopNRatings;
     }
 }

@@ -8,6 +8,7 @@ import prediction.ItemDeviation;
 import prediction.ItemRatingPredictor;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -67,7 +68,7 @@ public class StartPart2 {
         targetUser = allUsersTreeMap100k.get(186);
         long time = System.nanoTime();
 
-        Map<Integer, Double> topNRatings = itemRatingPredictor.getTopNRatings(targetUser, deviationPerMovie100k, allItemsTreeMap100k, 5);
+        List<String> topNRatings = itemRatingPredictor.getTopNRatings(targetUser, deviationPerMovie100k, allItemsTreeMap100k, 5);
         time = System.nanoTime() - time;
         System.out.println(topNRatings);
         System.out.println("Calculation time Top N: " + (time / 1000000) + "ms");

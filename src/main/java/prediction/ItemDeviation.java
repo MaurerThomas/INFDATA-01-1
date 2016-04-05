@@ -17,7 +17,6 @@ public class ItemDeviation {
         for (Map.Entry<Integer, Float> me : itemI.getUserItemRatings().entrySet()) {
             float itemIRating = me.getValue();
             int userId = me.getKey();
-
             if (userExistsInItemJ(itemI, itemJ, userId)) {
                 float itemJRating = itemJRatings.get(userId);
                 currentDeviation += (itemIRating - itemJRating);
@@ -25,12 +24,12 @@ public class ItemDeviation {
             }
         }
 
-        if (Double.doubleToRawLongBits(currentDeviation) == 0) {
-            return 0;
-        } else {
+        if (!Double.isNaN(currentDeviation)){
             deviation = currentDeviation / numberOfUsers;
-            return deviation;
+
         }
+        return deviation;
+
     }
 
     public Map<Integer, Map<Integer, ItemDeviation>> calculateItemDeviations(Map<Integer, Item> allItemsTreeMap) {
